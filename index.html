@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>UrbanWear Store</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #111;
+      color: #fff;
+    }
+
+    header {
+      background: #000;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    header h1 {
+      font-size: 22px;
+      margin: 0;
+      color: #00ff99;
+    }
+
+    .cart {
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    .cart span {
+      background: red;
+      padding: 2px 7px;
+      border-radius: 50%;
+      font-size: 14px;
+    }
+
+    .hero {
+      background-image: url("https://images.unsplash.com/photo-1521334884684-d80222895322");
+      background-size: cover;
+      background-position: center;
+      height: 60vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background-color: rgba(0,0,0,0.6);
+      background-blend-mode: darken;
+      padding: 20px;
+    }
+
+    .hero h2 {
+      font-size: 36px;
+    }
+
+    .hero p {
+      font-size: 18px;
+    }
+
+    .products {
+      padding: 40px 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    .product {
+      background: #1c1c1c;
+      border-radius: 15px;
+      padding: 15px;
+      text-align: center;
+      transition: 0.3s;
+    }
+
+    .product:hover {
+      transform: translateY(-8px);
+    }
+
+    .product img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+
+    .product h3 {
+      margin: 10px 0 5px;
+    }
+
+    .price {
+      color: #00ff99;
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      background: #00c3ff;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background: #00ff99;
+    }
+
+    footer {
+      background: #000;
+      padding: 20px;
+      text-align: center;
+    }
+
+    footer a {
+      color: #00c3ff;
+      text-decoration: none;
+      font-size: 18px;
+    }
+
+    footer a:hover {
+      color: #00ff99;
+    }
+
+    .checkout-container {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      width: 400px;
+      margin: 0 auto;
+    }
+
+    .checkout-container input, .checkout-container button {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      background: #00c3ff;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #00ff99;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>UrbanWear</h1>
+    <div class="cart" onclick="viewCart()">
+      🛒 Cart <span id="cartCount">0</span>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div>
+      <h2>UrbanWear Store</h2>
+      <p>Clothes • Perfumes • Street Style</p>
+    </div>
+  </section>
+
+  <section class="products">
+    <div class="product">
+      <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab" />
+      <h3>Classic T-Shirt</h3>
+      <div class="price">$25</div>
+      <button onclick="addToCart('Classic T-Shirt', 25)">Add to Cart</button>
+    </div>
+
+    <div class="product">
+      <img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f" />
+      <h3>Urban Jacket</h3>
+      <div class="price">$80</div>
+      <button onclick="addToCart('Urban Jacket', 80)">Add to Cart</button>
+    </div>
+
+    <div class="product">
+      <img src="https://images.unsplash.com/photo-1585386959984-a4155223f5d4" />
+      <h3>Luxury Perfume</h3>
+      <div class="price">$60</div>
+      <button onclick="addToCart('Luxury Perfume', 60)">Add to Cart</button>
+    </div>
+
+    <div class="product">
+      <img src="https://images.unsplash.com/photo-1615634260167-c8cdede054de" />
+      <h3>Street Hoodie</h3>
+      <div class="price">$45</div>
+      <button onclick="addToCart('Street Hoodie', 45)">Add to Cart</button>
+    </div>
+  </section>
+
+  <footer>
+    <a href="https://www.facebook.com/share/1YdTRasxuj/" target="_blank">
+      🔵 Visit Our Facebook
+    </a>
+  </footer>
+
+  <script>
+    let cart = [];
+
+    function addToCart(product, price) {
+      cart.push({ product, price });
+      document.getElementById("cartCount").innerText = cart.length;
+    }
+
+    function viewCart() {
+      let cartDetails = cart.map(item => `${item.product} - $${item.price}`).join('\n');
+      alert(`Your cart:\n\n${cartDetails}\n\nTotal: $${calculateTotal()}`);
+    }
+
+    function calculateTotal() {
+      return cart.reduce((total, item) => total + item.price, 0);
+    }
+  </script>
+
+  <!-- Checkout page -->
+  <div class="checkout-container">
+    <h2>Checkout</h2>
+    <form onsubmit="submitOrder(event)">
+      <input type="text" id="name" placeholder="Full Name" required />
+      <input type="email" id="email" placeholder="Email" required />
+      <input type="text" id="address" placeholder="Shipping Address" required />
+      <button type="submit">Complete Order</button>
+    </form>
+  </div>
+
+  <script>
+    function submitOrder(event) {
+      event.preventDefault();
+      let name = document.getElementById("name").value;
+      let email = document.getElementById("email").value;
+      let address = document.getElementById("address").value;
+      
+      alert(`Order placed!\nName: ${name}\nEmail: ${email}\nAddress: ${address}`);
+    }
+  </script>
+
+</body>
+</html>
